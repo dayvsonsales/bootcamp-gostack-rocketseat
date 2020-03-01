@@ -11,20 +11,27 @@ export const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+`;
 
-    button {
-      background: #7159c1;
-      color: #fff;
-      border: 0;
-      border-radius: 4px;
-      padding: 12px 20px;
-      font-weight: bold;
-      text-transform: uppercase;
+export const DoOrder = styled.button.attrs(props => ({
+  disabled: props.disabled,
+}))`
+  background: #7159c1;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
 
-      &:hover {
-        background: ${darken(0.03, '#7159c1')};
-      }
-    }
+  &:hover {
+    background: ${darken(0.03, '#7159c1')};
+  }
+
+  &:disabled {
+    background: grey;
+    cursor: not-allowed;
   }
 `;
 
@@ -91,4 +98,12 @@ export const Total = styled.div`
     font-size: 28px;
     margin-left: 5px;
   }
+`;
+
+export const EmptyCart = styled.div`
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  justify-content: center;
 `;
