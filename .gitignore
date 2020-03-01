@@ -1,7 +1,7 @@
 
 # Created by https://www.gitignore.io/api/react,macos,reactnative,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=react,macos,reactnative,visualstudiocode
-
+.vscode
 ### macOS ###
 # General
 .DS_Store
