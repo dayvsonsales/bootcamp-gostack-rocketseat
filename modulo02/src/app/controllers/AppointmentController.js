@@ -111,6 +111,7 @@ class AppointmentController {
       "'dia' dd 'de' MMMM', às' H:mm'h'",
       { locale: pt }
     );
+
     const user = await User.findByPk(req.userId);
 
     await Notification.create({
