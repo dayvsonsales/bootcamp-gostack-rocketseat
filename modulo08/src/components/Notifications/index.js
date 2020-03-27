@@ -2,12 +2,11 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 
 import { toast } from 'react-toastify';
 
-import api from '~/services/api';
-
 import { parseISO, formatDistance } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 import { MdNotifications } from 'react-icons/md';
+import api from '~/services/api';
 import {
   Container,
   Badge,
@@ -23,10 +22,29 @@ export default function Notifications() {
 
   const hasUnread = useMemo(() => {
     return (
-      notifications.filter(notification => notification.read === false).length >
-      0
+      notifications.filter((notification) => notification.read === false)
+        .length > 0
     );
   }, [notifications]);
+
+  async function loadNotifications() {
+    const response = await api.get('notifications');
+
+    // eslint-disable-next-line
+    response.data.map((notification) => {
+      notification.createdAt = parseISO(notification.createdAt);
+      notification.parsed_created_at = formatDistance(
+        notification.createdAt,
+        new Date(),
+        {
+          addSuffix: true,
+          locale: pt,
+        }
+      );
+    });
+
+    setNotifications(response.data);
+  }
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -43,25 +61,6 @@ export default function Notifications() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
-
-  async function loadNotifications() {
-    const response = await api.get('notifications');
-
-    // eslint-disable-next-line
-    response.data.map(notification => {
-      notification.createdAt = parseISO(notification.createdAt);
-      notification.parsed_created_at = formatDistance(
-        notification.createdAt,
-        new Date(),
-        {
-          addSuffix: true,
-          locale: pt,
-        }
-      );
-    });
-
-    setNotifications(response.data);
-  }
 
   function handleToggleVisible() {
     console.tron.log(visible);
@@ -85,7 +84,7 @@ export default function Notifications() {
 
       <NotificationList visible={visible}>
         <Scroll>
-          {notifications.map(notification => (
+          {notifications.map((notification) => (
             <Notification key={notification._id} unread={!notification.read}>
               <p>{notification.content}</p>
               <time>{notification.parsed_created_at}</time>
