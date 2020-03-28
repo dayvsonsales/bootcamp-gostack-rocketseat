@@ -20,9 +20,9 @@ function* createAccount({ payload }) {
 }
 
 function* updateProfile({ payload }) {
-  const { name, email, avatar_id, ...rest } = payload.data;
+  const { name, email, ...rest } = payload.data;
 
-  const profile = { name, email, avatar_id, ...(rest.oldPassword ? rest : {}) };
+  const profile = { name, email, ...(rest.oldPassword ? rest : {}) };
 
   try {
     const response = yield call(api.put, '/users', profile);

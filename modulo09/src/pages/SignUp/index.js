@@ -63,7 +63,9 @@ export default function SignUp({ navigation }) {
             placeholder="Sua senha secreta"
           />
 
-          <SubmitButton onPress={handleSubmit}>Criar conta</SubmitButton>
+          <SubmitButton loading={loading} onPress={handleSubmit}>
+            Criar conta
+          </SubmitButton>
         </Form>
 
         <SignLink

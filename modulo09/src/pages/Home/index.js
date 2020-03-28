@@ -1,28 +1,60 @@
-import React from 'react';
-import { View, Button } from 'react-native';
-
-import { persistor } from '~/store';
-
+import React, { useEffect, useState } from 'react';
+import { withNavigationFocus } from '@react-navigation/compat';
+import PropTypes from 'prop-types';
 import Background from '~/components/Background';
+import Appointment from '~/components/Appointment';
 
-// import { Container } from './styles';
+import { Container, Title, List } from './styles';
 
-export default function Home() {
-  function logout() {
-    persistor.purge();
+import api from '~/services/api';
+
+function Home({ isFocused }) {
+  const [appointments, setAppointments] = useState([]);
+
+  async function loadAppointments() {
+    const response = await api.get('/appointments');
+
+    setAppointments(response.data);
+  }
+  useEffect(() => {
+    if (isFocused) {
+      loadAppointments();
+    }
+  }, [isFocused]);
+
+  async function handleCancel(id) {
+    const response = await api.delete(`/appointments/${id}`);
+
+    setAppointments(
+      appointments.map((appointment) =>
+        appointment.id === id
+          ? {
+              ...appointment,
+              canceled_at: response.data.canceled_at,
+            }
+          : appointment
+      )
+    );
   }
 
   return (
     <Background>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Button title="Sair" onPress={logout}></Button>
-      </View>
+      <Container>
+        <Title>Agendamentos</Title>
+        <List
+          data={appointments}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <Appointment onCancel={() => handleCancel(item.id)} data={item} />
+          )}
+        />
+      </Container>
     </Background>
   );
 }
+
+Home.propTypes = {
+  isFocused: PropTypes.bool,
+};
+
+export default withNavigationFocus(Home);
