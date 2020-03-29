@@ -26,7 +26,7 @@ export default function Appointment({ data, onCancel }) {
         />
 
         <Info>
-          <Name>Dayvson</Name>
+          <Name>{data.provider.name}</Name>
           <Time>{dateParsed}</Time>
         </Info>
       </Left>
