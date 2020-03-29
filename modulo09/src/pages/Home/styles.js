@@ -1,7 +1,12 @@
+import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.KeyboardAvoidingView.attrs({
+  enabled: Platform.OS === 'ios',
+  behavior: 'padding',
+})`
   flex: 1;
+  margin-top: 50px;
 `;
 
 export const Title = styled.Text`

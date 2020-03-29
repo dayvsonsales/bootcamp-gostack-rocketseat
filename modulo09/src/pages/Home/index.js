@@ -16,6 +16,7 @@ function Home({ isFocused }) {
 
     setAppointments(response.data);
   }
+
   useEffect(() => {
     if (isFocused) {
       loadAppointments();
@@ -23,17 +24,10 @@ function Home({ isFocused }) {
   }, [isFocused]);
 
   async function handleCancel(id) {
-    const response = await api.delete(`/appointments/${id}`);
+    await api.delete(`/appointments/${id}`);
 
     setAppointments(
-      appointments.map((appointment) =>
-        appointment.id === id
-          ? {
-              ...appointment,
-              canceled_at: response.data.canceled_at,
-            }
-          : appointment
-      )
+      appointments.filter((appointment) => appointment.id !== id)
     );
   }
 
